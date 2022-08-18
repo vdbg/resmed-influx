@@ -1,0 +1,4 @@
+beautifulsoup4
+influxdb-client[ciso]
+PyJWT==2.3.0
+pyyaml

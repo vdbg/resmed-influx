@@ -1,0 +1,16 @@
+resmed:
+  login: "resmed user e-mail" # as entered on https://myair2.resmed.com/ or in myAir app
+  password: "redmed password" # as entered on https://myair2.resmed.com/ or in myAir app
+  region: "NA"                # Either NA (for North America) or EU (for Europe)
+  max_days: 365               # max number of days of historical data to query. Note: resmed's API does not precisely honor this.
+
+influx:
+  url: http://localhost:8086
+  bucket: "Resmed"           # Name of bucket to use in influx db
+  measurement: "cpap"        # Name of measurement
+  token: super-secret-token
+  org: "your org in influx"
+
+main:
+  logverbosity: INFO # By increasing level of verbosity: FATAL, ERROR, WARNING, INFO, DEBUG
+  loop_minutes: 60   # How often to pull data from resmed
