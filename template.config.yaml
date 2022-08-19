@@ -1,6 +1,6 @@
 resmed:
   login: "resmed user e-mail" # as entered on https://myair2.resmed.com/ or in myAir app
-  password: "redmed password" # as entered on https://myair2.resmed.com/ or in myAir app
+  password: "resmed password" # as entered on https://myair2.resmed.com/ or in myAir app
   region: "NA"                # Either NA (for North America) or EU (for Europe)
   max_days: 365               # max number of days of historical data to query. Note: resmed's API does not precisely honor this.
 
