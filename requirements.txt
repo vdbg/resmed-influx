@@ -1,0 +1,11 @@
+aiohttp
+beautifulsoup4
+# Can replace
+#   influxdb-client
+# with
+#   influxdb-client[cisco]
+# for better performance.
+# This does however require a change in Dockerfile that significantly increases the size of the image.
+influxdb-client
+PyJWT==2.3.0
+pyyaml
