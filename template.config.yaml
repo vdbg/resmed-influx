@@ -1,8 +1,9 @@
 resmed:
-  login: "resmed user e-mail" # As entered on https://myair2.resmed.com/ or in myAir app
-  password: "resmed password" # As entered on https://myair2.resmed.com/ or in myAir app
+  login: "resmed user e-mail" # As entered on https://myair2.resmed.com/ or in the myAir app
+  password: "resmed password" # As entered on https://myair2.resmed.com/ or in the myAir app
   region: "NA"                # Either NA (for North America) or EU (for Europe)
-  max_days: 365               # Max number of days of historical data to query. Note: resmed's API does not precisely honor this.
+  # Max number of days of historical data to query. Note: app may end up downloading more days because resmed's API have a month granularity
+  max_days: 365
 
 influx:
   url: http://localhost:8086
