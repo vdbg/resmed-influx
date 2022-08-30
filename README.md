@@ -5,7 +5,7 @@ Allows for importing [MyAir](https://myair.resmed.com/) data to [InfluxDB](https
 ## Requirements
 
 - The MyAir credentials associated with the [ResMed CPAP](https://www.resmed.com/en-us/sleep-apnea/cpap-products/cpap-machines/) that's uploading MyAir data to the cloud
-- A device, capable of running either Docker containers or Python e.g., [Rasbpian](https://www.raspbian.org/) or Windows
+- A device, capable of running either Docker containers or Python e.g., [Raspbian](https://www.raspbian.org/) or Windows
 - [InfluxDB](https://en.wikipedia.org/wiki/InfluxDB) v2 installed and accessible from the device running the import 
 - Bucket created on the influxDB and token available
 
