@@ -1,10 +1,8 @@
 # Alpine for smaller size
 FROM python:3.9-alpine
 
-# Create a system account hubibot.hubibot
+# Create a system account
 RUN addgroup -S resmed && adduser -S resmed -G resmed
-# Non-alpine equivalent of above:
-#RUN groupadd -r resmed && useradd -r -m -g resmed resmed
 
 # Due to https://github.com/closeio/ciso8601/issues/98,
 # when replacing "influxdb-client" with "influxdb-client[cisco]" in
@@ -22,10 +20,13 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
+# Install location of upgraded pip
+ENV PATH /home/resmed/.local/bin:$PATH
+
 COPY requirements.txt     /app
 
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -r ./requirements.txt --no-warn-script-location 
+RUN pip install --no-cache-dir --disable-pip-version-check --upgrade pip && \
+    pip install --no-cache-dir -r ./requirements.txt
 
 COPY *.py                 /app/
 COPY myair_client/*.py    /app/myair_client/
