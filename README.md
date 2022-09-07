@@ -5,7 +5,7 @@ Allows for importing [MyAir](https://myair.resmed.com/) data to [InfluxDB](https
 ## Requirements
 
 - The MyAir credentials associated with the [ResMed CPAP](https://www.resmed.com/en-us/sleep-apnea/cpap-products/cpap-machines/) that's uploading MyAir data to the cloud
-- A device, capable of running either Docker containers or Python e.g., [Rasbpian](https://www.raspbian.org/) or Windows
+- A device, capable of running either Docker containers or Python e.g., [Raspbian](https://www.raspbian.org/) or Windows
 - [InfluxDB](https://en.wikipedia.org/wiki/InfluxDB) v2 installed and accessible from the device running the import
 - Bucket created on the influxDB and token available
 
@@ -30,7 +30,7 @@ Choose one of these 3 methods.
 ### Using Docker image built from source
 
 1. `git clone https://github.com/vdbg/resmed-influx.git`
-2. `sudo docker build -t resmed-influx-image resmed-influx`
+2. `sudo docker build -t resmed-influx-image resmed-influx/`
 3. `cd resmed-influx`
 4. `cp template.config.yaml config.yaml`
 5. Edit `config.yaml` by following the instructions in the file
@@ -45,8 +45,6 @@ Choose one of these 3 methods.
 ### Running directly on the device
 
 [Python](https://www.python.org/) 3.9 or later with pip3 required. `sudo apt-get install python3-pip` will install pip3 on ubuntu/raspbian systems if missing.
-
-To install:
 
 1. `git clone https://github.com/vdbg/resmed-influx.git`
 2. `cd resmed-influx`
