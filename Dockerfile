@@ -1,5 +1,5 @@
 # Alpine for smaller size
-FROM python:3.9-alpine
+FROM python:3.11-alpine
 
 # Create a system account
 RUN addgroup -S resmed && adduser -S resmed -G resmed
@@ -29,6 +29,6 @@ RUN  pip install --no-cache-dir -r ./requirements.txt
 
 COPY *.py                 /app/
 COPY myair_client/*.py    /app/myair_client/
-COPY template.config.yaml /app/
+COPY template.config.toml /app/
 
 ENTRYPOINT python main.py
