@@ -8,4 +8,3 @@ beautifulsoup4
 # This does however require a change in Dockerfile that significantly increases the size of the image.
 influxdb-client
 PyJWT==2.3.0
-pyyaml

@@ -15,16 +15,16 @@ Choose one of these 3 methods.
 
 ### Using pre-built Docker image (recommended)
 
-1. `touch config.yaml`
-2. This will fail due to malformed config.yaml. That's intentional :)
-   ``sudo docker run --name myAir -v "`pwd`/config.yaml:/app/config.yaml" vdbg/resmed-influx``
-3. `sudo docker cp myAir:/app/template.config.yaml config.yaml`
-4. Edit `config.yaml` by following the instructions in the file
+1. `touch config.toml`
+2. This will fail due to malformed config.toml. That's intentional :)
+   ``sudo docker run --name myAir -v "`pwd`/config.toml:/app/config.toml" vdbg/resmed-influx``
+3. `sudo docker cp myAir:/app/template.config.toml config.toml`
+4. Edit `config.toml` by following the instructions in the file
 5. `sudo docker start myAir -i`
   This will display logging on the command window allowing for rapid troubleshooting. `Ctrl-C` to stop the container.
 7. When done testing the config:
   * `sudo docker container rm myAir`
-  * ``sudo docker run -d --name myAir -v "`pwd`/config.yaml:/app/config.yaml" --restart=always --memory=100m vdbg/resmed-influx``
+  * ``sudo docker run -d --name myAir -v "`pwd`/config.toml:/app/config.toml" --restart=always --memory=100m vdbg/resmed-influx``
   * To see logs: `sudo docker container logs -f myAir`
 
 ### Using Docker image built from source
@@ -32,30 +32,35 @@ Choose one of these 3 methods.
 1. `git clone https://github.com/vdbg/resmed-influx.git`
 2. `sudo docker build -t resmed-influx-image resmed-influx/`
 3. `cd resmed-influx`
-4. `cp template.config.yaml config.yaml`
-5. Edit `config.yaml` by following the instructions in the file
-6. Test run: ``sudo docker run --name myAir -v "`pwd`/config.yaml:/app/config.yaml" resmed-influx-image``
+4. `cp template.config.toml config.toml`
+5. Edit `config.toml` by following the instructions in the file
+6. Test run: ``sudo docker run --name myAir -v "`pwd`/config.toml:/app/config.toml" resmed-influx-image``
    This will display logging on the command window allowing for rapid troubleshooting. `Ctrl-C` to stop the container.
 7. If container needs to be restarted for testing: `sudo docker start myAir -i`
 8. When done testing the config:
   * `sudo docker container rm myAir`
-  * ``sudo docker run -d --name myAir -v "`pwd`/config.yaml:/app/config.yaml" --restart=always --memory=100m resmed-influx-image``
+  * ``sudo docker run -d --name myAir -v "`pwd`/config.toml:/app/config.toml" --restart=always --memory=100m resmed-influx-image``
   * To see logs: `sudo docker container logs -f myAir`
 
 ### Running directly on the device
 
-[Python](https://www.python.org/) 3.9 or later with pip3 required. `sudo apt-get install python3-pip` will install pip3 on ubuntu/raspbian systems if missing.
+[Python](https://www.python.org/) 3.11+ with pip3 required. `sudo apt-get install python3-pip` will install pip3 on ubuntu/raspbian systems if missing.
 
 1. `git clone https://github.com/vdbg/resmed-influx.git`
 2. `cd resmed-influx`
-3. `cp template.config.yaml config.yaml`
-4. Edit `config.yaml` by following the instructions in the file
+3. `cp template.config.toml config.toml`
+4. Edit `config.toml` by following the instructions in the file
 5. `pip3 install -r requirements.txt`
 6. Run the program:
   * Interactive mode: `python3 main.py`
   * Shorter: `.\main.py` (Windows) or `./main.py` (any other OS).
   * As a background process (on non-Windows OS): `python3 main.py > log.txt 2>&1 &`
 7. To exit: `Ctrl-C` if running in interactive mode, `kill` the process otherwise.
+
+## Troubleshooting
+
+The app may fail on first run, or may start failing after a long period of successful runs with a "policyNotAccepted" error.
+If this happens, navigate to the [myAir web - ResMed](https://myair.resmed.com) site, enter your credentials, and accept myAir's policy.
 
 ## Grafana
 

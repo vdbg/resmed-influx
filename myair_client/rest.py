@@ -11,6 +11,7 @@ import os
 import re
 import hashlib
 import jwt
+import logging
 from urllib.parse import urldefrag, parse_qs
 
 import aiohttp
@@ -56,9 +57,7 @@ class MyAirRESTClient(MyAirClient):
     session: ClientSession
 
     def __init__(self, config: MyAirConfig, session: ClientSession):
-        assert (
-            config.region == "NA"
-        ), "REST client used outside NA, this should not happen. Please file a bug"
+        assert config.region == "NA", "REST client used outside NA, this should not happen. Please file a bug"
         self.config = config
         self.session = session
 
@@ -97,9 +96,7 @@ class MyAirRESTClient(MyAirClient):
         code_challenge = code_challenge.replace("=", "")
 
         # We use that sessionToken and exchange for an oauth code, using PKCE
-        authorize_url = US_CONFIG["authorize_url"].format(
-            authn_client_id=US_CONFIG["authn_client_id"]
-        )
+        authorize_url = US_CONFIG["authorize_url"].format(authn_client_id=US_CONFIG["authn_client_id"])
         async with self.session.get(
             authorize_url,
             headers=headers,
@@ -245,5 +242,7 @@ query getPatientWrapper {
 """
 
         records_json = await self.gql_query("getPatientWrapper", query)
+        if "errors" in records_json and records_json["errors"]:
+            logging.warn(f"There are errors reported; if these say 'policyNotAccepted' then you need to manually log on the myair website and accept the new policies: {records_json['errors']}")
         device = records_json["data"]["getPatientWrapper"]["fgDevices"][0]
         return device

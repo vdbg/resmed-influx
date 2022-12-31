@@ -59,7 +59,6 @@ class MyAirConnector:
 
             return [current_report_time, ret]
 
-        except Exception as e:
-            logging.error(f"Unable to get myair data: {e}")
-
-        return None
+        except:
+            logging.exception("Unable to get myair data")
+            raise
