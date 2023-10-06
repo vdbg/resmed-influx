@@ -2,25 +2,35 @@ version: '3'
 services:
   influxdb:
     image: influxdb:2.0
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUXDB_USER}
+      - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_PASSWORD}
+      - DOCKER_INFLUXDB_INIT_ORG=${INFLUXDB_ORG}
+      - DOCKER_INFLUXDB_INIT_BUCKET=${INFLUXDB_BUCKET}
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${INFLUXDB_TOKEN}
     volumes:
-      - influxdb-data:/var/lib/influxdb2
+      - ./influxdb-data:/var/lib/influxdb2
 
   grafana:
     image: grafana/grafana:latest
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
     depends_on:
       - influxdb
     volumes:
-      - grafana-data:/var/lib/grafana
-      - ./provisioning/dashboards:/var/lib/grafana/dashboards
-      - ./provisioning/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml
+      - ./grafana-data:/var/lib/grafana
+      - ./grafana:/var/lib/grafana/dashboards
+      - ./grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml
 
   resmed-influx:
     image: vdbg/resmed-influx
+    container_name: myAir
     depends_on:
       - influxdb
     volumes:
       - ./config.toml:/app/config.toml
-
-volumes:
-  influxdb-data:
-  grafana-data:
+    restart: always
+    mem_limit: 100m
+    stdin_open: false # Allows keeping the input stream open for troubleshooting
+    tty: false        # Allocates a pseudo-TTY to the container for troubleshooting
