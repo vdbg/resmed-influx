@@ -1,0 +1,26 @@
+version: '3'
+services:
+  influxdb:
+    image: influxdb:2.0
+    volumes:
+      - influxdb-data:/var/lib/influxdb2
+
+  grafana:
+    image: grafana/grafana:latest
+    depends_on:
+      - influxdb
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./provisioning/dashboards:/var/lib/grafana/dashboards
+      - ./provisioning/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml
+
+  resmed-influx:
+    image: vdbg/resmed-influx
+    depends_on:
+      - influxdb
+    volumes:
+      - ./config.toml:/app/config.toml
+
+volumes:
+  influxdb-data:
+  grafana-data:
