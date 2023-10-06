@@ -1,3 +1,4 @@
+import os
 import asyncio
 from datetime import datetime, timezone
 import logging
@@ -12,6 +13,28 @@ from myair import MyAirConnector
 
 logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.INFO)
 
+def create_config():
+    config_data = {
+        "resmed": {
+            "login": os.getenv('RESMED_LOGIN'),
+            "password": os.getenv('RESMED_PASSWORD'),
+            "region": os.getenv('RESMED_REGION'),
+            "max_days": int(os.getenv('RESMED_MAX_DAYS', '365'))  # Default to 365 if not set
+        },
+        "influx": {
+            "url": os.getenv('INFLUX_URL'),
+            "bucket": os.getenv('INFLUX_BUCKET'),
+            "measurement": os.getenv('INFLUX_MEASUREMENT'),
+            "token": os.getenv('INFLUX_TOKEN'),
+            "org": os.getenv('INFLUX_ORG')
+        },
+        "main": {
+            "logverbosity": os.getenv('MAIN_LOGVERBOSITY', 'INFO'),  # Default to INFO if not set
+            "loop_minutes": int(os.getenv('MAIN_LOOP_MINUTES', '60'))  # Default to 60 if not set
+        }
+    }
+    with open(Path(__file__).with_name('config.toml'), "w") as config_file:
+        tomllib.dump(config_data, config_file)
 
 def get_config():
     CONFIG_FILE = "config.toml"
@@ -28,8 +51,13 @@ def get_config():
 
             return config
     except FileNotFoundError as e:
-        logging.error(f"Missing {e.filename}.")
-        exit(2)
+        logging.error(f"Missing {e.filename}. Creating a new one...")
+        create_config()
+        if not retry:
+            return get_config(retry=True)
+        else:
+            logging.error(f"Failed to create {e.filename}.")
+            exit(2)
 
 
 last_report_time: str = None
