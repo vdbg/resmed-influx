@@ -26,7 +26,7 @@ services:
 
   resmed-influx:
     build: 
-      context: https://github.com/latetedemelon/resmed
+      context: .
     container_name: myAir
     depends_on:
       - influxdb
