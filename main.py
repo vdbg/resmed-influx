@@ -47,17 +47,17 @@ def get_config(retry=False):
         else:
             logging.error(f"Failed to recreate {CONFIG_FILE}.")
             exit(2)
-    try:
-        with open(Path(__file__).with_name(CONFIG_FILE), "rb") as config_file:
+try:
+        with open(config_path, "rb") as config_file:
             config = tomllib.load(config_file)
-
-            if not config:
-                raise ValueError(f"Invalid {CONFIG_FILE}. See template.{CONFIG_FILE}.")
-
-            for name in {"resmed", "influx", "main"}:
-                if name not in config:
-                    raise ValueError(f"Invalid {CONFIG_FILE}: missing section {name}.")
-
+            if not config or not all(section in config for section in {"resmed", "influx", "main"}):
+                if not retry:
+                    logging.error(f"Invalid or incomplete {CONFIG_FILE}. Recreating it...")
+                    create_config()
+                    return get_config(retry=True)
+                else:
+                    logging.error(f"Failed to recreate {CONFIG_FILE}.")
+                    exit(2)
             return config
     except FileNotFoundError as e:
         logging.error(f"Missing {e.filename}. Creating a new one...")
