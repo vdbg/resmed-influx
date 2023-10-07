@@ -33,4 +33,4 @@ RUN chmod +x entrypoint.sh
 COPY myair_client/*.py    /app/myair_client/
 COPY template.config.toml /app/
 
-ENTRYPOINT python main.py
+ENTRYPOINT ["/app/entrypoint.sh"]
