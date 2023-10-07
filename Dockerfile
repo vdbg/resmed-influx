@@ -30,5 +30,6 @@ RUN  pip install --no-cache-dir -r ./requirements.txt
 COPY *.py                 /app/
 COPY myair_client/*.py    /app/myair_client/
 COPY template.config.toml /app/
+RUN touch                 /app/config.toml
 
 ENTRYPOINT ["python", "/app/main.py"]
