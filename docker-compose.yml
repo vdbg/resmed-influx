@@ -23,8 +23,10 @@ services:
       - ./grafana:/var/lib/grafana/dashboards
       - ./grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml
 
+
   resmed-influx:
-    image: vdbg/resmed-influx
+    build: 
+      context: https://github.com/latetedemelon/resmed
     container_name: myAir
     depends_on:
       - influxdb
