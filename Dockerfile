@@ -10,7 +10,7 @@ RUN addgroup -S resmed && adduser -S resmed -G resmed
 # which significantly increases the size of the docker image.
 # RUN apk add --no-cache build-base
 
-USER resmed
+
 
 WORKDIR /app
 
@@ -32,5 +32,5 @@ COPY *.sh                 /app/
 RUN chmod +x              /app/entrypoint.sh
 COPY myair_client/*.py    /app/myair_client/
 COPY template.config.toml /app/
-
+USER resmed
 ENTRYPOINT ["/app/entrypoint.sh"]
