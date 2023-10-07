@@ -28,6 +28,7 @@ COPY requirements.txt     /app
 RUN  pip install --no-cache-dir -r ./requirements.txt
 
 COPY *.py                 /app/
+COPY *.sh                 /app/
 COPY myair_client/*.py    /app/myair_client/
 COPY template.config.toml /app/
 
