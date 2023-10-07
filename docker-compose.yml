@@ -24,7 +24,7 @@ services:
       - ./grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml
 
 
-resmed-influx:
+  resmed-influx:
     build: 
       context: .
     container_name: myAir
