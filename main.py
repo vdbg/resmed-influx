@@ -47,7 +47,8 @@ def get_config(retry=False):
         else:
             logging.error(f"Failed to recreate {CONFIG_FILE}.")
             exit(2)
-try:
+
+    try:
         with open(config_path, "rb") as config_file:
             config = tomllib.load(config_file)
             if not config or not all(section in config for section in {"resmed", "influx", "main"}):
