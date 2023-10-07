@@ -12,6 +12,7 @@ from influx import InfluxConnector
 from myair import MyAirConnector
 
 logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.INFO)
+CONFIG_FILE='config.toml'
 
 def create_config():
     config_data = {
@@ -33,7 +34,7 @@ def create_config():
             "loop_minutes": int(os.getenv('MAIN_LOOP_MINUTES', '60'))  # Default to 60 if not set
         }
     }
-    with open(Path(__file__).with_name('config.toml'), "w") as config_file:
+    with open(Path(__file__).with_name(CONFIG_FILE), "w") as config_file:
         tomllib.dump(config_data, config_file)
 
 def get_config(retry=False):
