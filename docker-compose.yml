@@ -24,14 +24,16 @@ services:
       - ./grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml
 
 
-  resmed-influx:
+resmed-influx:
     build: 
       context: .
     container_name: myAir
+    entrypoint: /app/entrypoint.sh
     depends_on:
       - influxdb
     volumes:
       - ./config.toml:/app/config.toml
+      - ./entrypoint.sh:/app/entrypoint.sh
     restart: always
     mem_limit: 100m
     stdin_open: false # Allows keeping the input stream open for troubleshooting
