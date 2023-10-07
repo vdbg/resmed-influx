@@ -36,8 +36,17 @@ def create_config():
     with open(Path(__file__).with_name('config.toml'), "w") as config_file:
         tomllib.dump(config_data, config_file)
 
-def get_config():
-    CONFIG_FILE = "config.toml"
+def get_config(retry=False):
+    config_path = Path(__file__).with_name(CONFIG_FILE)
+    if config_path.is_dir():
+        logging.error(f"{CONFIG_FILE} is a directory. Deleting and recreating it as a file...")
+        config_path.rmdir()  # This will fail if the directory is not empty
+        create_config()
+        if not retry:
+            return get_config(retry=True)
+        else:
+            logging.error(f"Failed to recreate {CONFIG_FILE}.")
+            exit(2)
     try:
         with open(Path(__file__).with_name(CONFIG_FILE), "rb") as config_file:
             config = tomllib.load(config_file)
