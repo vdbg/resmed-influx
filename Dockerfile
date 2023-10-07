@@ -29,7 +29,7 @@ RUN  pip install --no-cache-dir -r ./requirements.txt
 
 COPY *.py                 /app/
 COPY *.sh                 /app/
-RUN chmod +x entrypoint.sh
+RUN chmod +x              /app/entrypoint.sh
 COPY myair_client/*.py    /app/myair_client/
 COPY template.config.toml /app/
 
