@@ -11,36 +11,16 @@ Allows for importing [MyAir](https://myair.resmed.com/) data to [InfluxDB](https
 
 ## Setup
 
-Choose one of these 3 methods.
-
-### Using pre-built Docker image (recommended)
-
-1. `touch config.toml`
-2. This will fail due to malformed config.toml. That's intentional :)
-   ``sudo docker run --name myAir -v "`pwd`/config.toml:/app/config.toml" vdbg/resmed-influx``
-3. `sudo docker cp myAir:/app/template.config.toml config.toml`
-4. Edit `config.toml` by following the instructions in the file
-5. `sudo docker start myAir -i`
-  This will display logging on the command window allowing for rapid troubleshooting. `Ctrl-C` to stop the container.
-7. When done testing the config:
-  * `sudo docker container rm myAir`
-  * ``sudo docker run -d --name myAir -v "`pwd`/config.toml:/app/config.toml" --restart=always --memory=100m vdbg/resmed-influx``
-  * To see logs: `sudo docker container logs -f myAir`
+Choose one of these 2 methods.
 
 ### Using Docker image built from source
 
 1. `git clone https://github.com/vdbg/resmed-influx.git`
-2. `sudo docker build -t resmed-influx-image resmed-influx/`
-3. `cd resmed-influx`
-4. `cp template.config.toml config.toml`
-5. Edit `config.toml` by following the instructions in the file
-6. Test run: ``sudo docker run --name myAir -v "`pwd`/config.toml:/app/config.toml" resmed-influx-image``
-   This will display logging on the command window allowing for rapid troubleshooting. `Ctrl-C` to stop the container.
-7. If container needs to be restarted for testing: `sudo docker start myAir -i`
-8. When done testing the config:
-  * `sudo docker container rm myAir`
-  * ``sudo docker run -d --name myAir -v "`pwd`/config.toml:/app/config.toml" --restart=always --memory=100m resmed-influx-image``
+2. `cd resmed-influx`
+3. edit the .env with your myAir Credientals
+4. `docker compose up -d`
   * To see logs: `sudo docker container logs -f myAir`
+  * If you change your credientials after the initial run they will need to be updated in config.toml as well
 
 ### Running directly on the device
 
