@@ -11,7 +11,10 @@ Allows for importing [MyAir](https://myair.resmed.com/) data to [InfluxDB](https
 
 ## Setup
 
-Choose one of these 3 methods.
+The app reads the settings from `template.config.toml`, then `config.toml` (if it exists), then environment variables.
+See `template.config.toml` for details.
+
+Choose one of these methods.
 
 ### Using pre-built Docker image (recommended)
 
@@ -20,7 +23,7 @@ Choose one of these 3 methods.
    ``sudo docker run --name myAir -v "`pwd`/config.toml:/app/config.toml" vdbg/resmed-influx``
 3. `sudo docker cp myAir:/app/template.config.toml config.toml`
 4. Edit `config.toml` by following the instructions in the file
-5. `sudo docker start myAir -i`
+5. `sudo docker start myAir -i -e MYAIR_INFLUX_MAIN_LOG_VERBOSITY=DEBUG`
   This will display logging on the command window allowing for rapid troubleshooting. `Ctrl-C` to stop the container.
 7. When done testing the config:
   * `sudo docker container rm myAir`
@@ -41,6 +44,26 @@ Choose one of these 3 methods.
   * `sudo docker container rm myAir`
   * ``sudo docker run -d --name myAir -v "`pwd`/config.toml:/app/config.toml" --restart=always --memory=100m resmed-influx-image``
   * To see logs: `sudo docker container logs -f myAir`
+
+
+### With Docker without config file
+
+Dependency: Docker installed.
+
+Inspect `template.config.toml` file for all the settings that need to be overriden. Command will look something like:
+
+```
+sudo docker run \
+  -d \
+  --name myAir \
+  --memory=100m \
+  --pull=always \
+  --restart=always \
+  -e MYAIR_INFLUX_RESMED_LOGIN=user \
+  -e MYAIR_INFLUX_RESMED_PASSWORD=password \
+  -e MYAIR_INFLUX_INFLUX_TOKEN=token \
+  vdbg/resmed-influx
+```
 
 ### Running directly on the device
 
