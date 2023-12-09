@@ -25,7 +25,9 @@ class Config:
         # overwrite template with config, if exists
         config = self.__load__(self._file)
         if config:
-            ret.update(config)
+            for k, v in config.items():
+                for kk, vv in v.items():
+                    ret[k][kk] = vv
 
         # overwrite with environment variables, if exist
         for k, v in ret.items():
