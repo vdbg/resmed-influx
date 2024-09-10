@@ -2,37 +2,74 @@ import logging
 import os
 import tomllib
 from pathlib import Path
+from typing import Optional, Dict
 
 
 class Config:
+    """
+    A class to handle loading configuration from TOML files and environment variables.
+
+    Attributes:
+        file (str): The name of the configuration file to load.
+        prefix (str): The prefix used for overriding configurations via environment variables.
+    """
+
     def __init__(self, file: str, prefix: str) -> None:
+        """
+        Initialize the Config object with the file name and prefix for environment variables.
+
+        Args:
+            file (str): The configuration file name to load (without the "template." prefix).
+            prefix (str): The prefix to use for environment variable overrides.
+        """
         self._file = file
         self._prefix = prefix
 
-    def __load__(self, file: str) -> dict[str, dict] | None:
+    def _load_file(self, file: str) -> Optional[Dict[str, Dict]]:
+        """
+        Load a TOML configuration file.
+
+        Args:
+            file (str): The name of the TOML file to load.
+
+        Returns:
+            Optional[Dict[str, Dict]]: The parsed configuration as a dictionary, or None if the file is not found.
+        """
         try:
             with open(Path(__file__).with_name(file), "rb") as config_file:
                 return tomllib.load(config_file)
         except FileNotFoundError as e:
-            logging.warning(f"Missing {e.filename}.")
+            logging.warning(f"Configuration file not found: {e.filename}.")
+        except Exception as e:
+            logging.error(f"Error loading configuration file {file}: {e}")
         return None
 
-    def load(self) -> dict[str, dict]:
-        ret = self.__load__("template." + self._file)
-        if not ret:
-            raise Exception(f"File template.{self._file} required.")
+    def load(self) -> Dict[str, Dict]:
+        """
+        Load the configuration, merging values from a template file, an optional configuration file,
+        and environment variables.
 
-        # overwrite template with config, if exists
-        config = self.__load__(self._file)
-        if config:
-            for k, v in config.items():
-                for kk, vv in v.items():
-                    ret[k][kk] = vv
+        Returns:
+            Dict[str, Dict]: The final configuration after merging values from files and environment variables.
 
-        # overwrite with environment variables, if exist
-        for k, v in ret.items():
-            for kk, vv in v.items():
-                key = f"{self._prefix}_{k}_{kk}".upper()
-                ret[k][kk] = os.environ.get(key, vv)
+        Raises:
+            Exception: If the template configuration file cannot be found.
+        """
+        # Load the template configuration file
+        config = self._load_file(f"template.{self._file}")
+        if not config:
+            raise Exception(f"Template configuration file template.{self._file} is required and missing.")
 
-        return ret
+        # Overwrite template with user configuration file if it exists
+        user_config = self._load_file(self._file)
+        if user_config:
+            for section, settings in user_config.items():
+                config[section].update(settings)
+
+        # Overwrite with environment variables if they exist
+        for section, settings in config.items():
+            for key, value in settings.items():
+                env_key = f"{self._prefix}_{section}_{key}".upper()
+                config[section][key] = os.environ.get(env_key, value)
+
+        return config
