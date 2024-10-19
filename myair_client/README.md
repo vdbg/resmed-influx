@@ -1,0 +1,1 @@
+The contents of this folder are taken from https://github.com/prestomation/resmed_myair_sensors/tree/main/custom_components/resmed_myair/client
