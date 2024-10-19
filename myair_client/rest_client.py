@@ -205,9 +205,10 @@ class RESTClient(MyAirClient):
         _LOGGER.debug(f"[extract_and_update_cookies] extracted cookies: {cookies}")
     
         if cookies.get("DT", None) and cookies.get("DT", None) != self._cookie_dt:
+            new_value = cookies.get("DT", self._cookie_dt)
             if self._cookie_dt is not None:
-                _LOGGER.warning(f"Changing Device Token from: {self._cookie_dt}, to: {cookies.get("DT", None)}")
-            self._cookie_dt = cookies.get("DT", self._cookie_dt)
+                _LOGGER.warning(f"Changing Device Token from: {self._cookie_dt}, to: {new_value}")
+            self._cookie_dt = new_value
         if cookies.get("sid", None) and cookies.get("sid", None) != self._cookie_sid:
             if self._cookie_sid is not None:
                 _LOGGER.info(f"Updating to new sid cookie")
