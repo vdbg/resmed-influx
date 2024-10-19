@@ -3,7 +3,7 @@ from asyncio.proactor_events import _ProactorBasePipeTransport
 from datetime import datetime
 from functools import wraps
 import logging
-from myair_client.client import MyAirConfig
+from myair_client.myair_client import MyAirConfig
 from myair_client import get_client
 
 # Code copied from
